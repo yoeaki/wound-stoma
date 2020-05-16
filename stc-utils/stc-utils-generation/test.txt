@@ -1,0 +1,9 @@
+case,病历,cas
+id	id	bigint	PK
+病人id	patient_id	bigint
+医生id	doctor_id	bigint
+就诊时间	see_time	datetime
+病因id	disase_id	bigint
+诊断	diagnosis	varchar(255)
+建议	recommendation	varchar(255)
+病图	case_pic	varchar(255)

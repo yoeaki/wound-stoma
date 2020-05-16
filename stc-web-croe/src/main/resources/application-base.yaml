@@ -1,0 +1,12 @@
+
+spring:
+  mvc:
+    #404 抛出异常，方便统一处理
+    throw-exception-if-no-handler-found: true
+  aop:
+    proxy-target-class: false
+
+
+
+
+

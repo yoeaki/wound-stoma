@@ -1,0 +1,10 @@
+coach,教练,coach	
+id	id	bigint	PK
+username	username	varchar(20)
+password	password	varchar(255)
+sex	sex	varchar(1)
+phone	phone	varchar(20)
+email	email	varchar(50)
+address	address	varchar(20)
+school_id	school_id	bigint
+price	price	varchar(20)

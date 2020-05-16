@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.linkgoo.framework.web.repository.doc.DoctorRepository">
+
+
+
+	<resultMap id="doctorMap" type="com.linkgoo.framework.web.entity.doc.Doctor">
+		<id column="id" property="id" />		<!-- id -->
+		<result column="username" property="username" />		<!-- 用户名 -->
+		<result column="real_name" property="realName" />		<!-- 真实姓名 -->
+		<result column="password" property="password" />		<!-- 密码 -->
+		<result column="sex" property="sex" />		<!-- 性别 -->
+		<result column="age" property="age" />		<!-- 年龄 -->
+		<result column="phone" property="phone" />		<!-- 电话 -->
+		<result column="address" property="address" />		<!-- 地址 -->
+		<result column="role" property="role" />		<!-- 角色 -->
+	</resultMap>
+
+
+	<sql id="allColumns">
+		id,username,real_name,password,sex,age,phone,address,role
+	</sql>
+	<sql id="columns">
+		id,username,real_name,password,sex,age,phone,address,role
+	</sql>
+	<sql id="table">
+		doc_doctor
+	</sql>
+	<sql id="condition">
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="username != null">
+				AND username = #{username}
+			</if>
+			<if test="realName != null">
+				AND real_name = #{realName}
+			</if>
+			<if test="password != null">
+				AND password = #{password}
+			</if>
+			<if test="sex != null">
+				AND sex = #{sex}
+			</if>
+			<if test="age != null">
+				AND age = #{age}
+			</if>
+			<if test="phone != null">
+				AND phone = #{phone}
+			</if>
+			<if test="address != null">
+				AND address = #{address}
+			</if>
+			<if test="role != null">
+				AND role = #{role}
+			</if>
+		</trim>
+	</sql>
+	<sql id="conditionPK">
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				AND id = #{id}
+		</trim>
+	</sql>
+	<sql id="moreConditionPK">
+		WHERE id in
+		<trim prefix="(" suffix=")">
+			<foreach collection="ids" item="item" separator=",">
+				#{item}
+			</foreach>
+		</trim>
+	</sql>
+
+	<insert id="save" parameterType="com.linkgoo.framework.web.entity.doc.Doctor" >
+		insert into
+		<include refid="table" />
+		(
+		<include refid="columns" />
+		)
+		values
+		(#{id,jdbcType=BIGINT},#{username,jdbcType=VARCHAR},#{realName,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
+		#{sex,jdbcType=VARCHAR},#{age,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},
+		#{role,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="saveList" parameterType="java.util.List" useGeneratedKeys="true">
+		insert into
+		<include refid="table" />
+		(
+		<include refid="columns" />
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id,jdbcType=BIGINT},#{item.username,jdbcType=VARCHAR},#{item.realName,jdbcType=VARCHAR},#{item.password,jdbcType=VARCHAR},
+		#{item.sex,jdbcType=VARCHAR},#{item.age,jdbcType=VARCHAR},#{item.phone,jdbcType=VARCHAR},#{item.address,jdbcType=VARCHAR},
+		#{item.role,jdbcType=INTEGER}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="com.linkgoo.framework.web.entity.doc.Doctor">
+		update
+		<include refid="table" />
+		<set>
+			<if test="username != null">
+				username = #{username},
+			</if>
+			<if test="realName != null">
+				real_name = #{realName},
+			</if>
+			<if test="password != null">
+				password = #{password},
+			</if>
+			<if test="sex != null">
+				sex = #{sex},
+			</if>
+			<if test="age != null">
+				age = #{age},
+			</if>
+			<if test="phone != null">
+				phone = #{phone},
+			</if>
+			<if test="address != null">
+				address = #{address},
+			</if>
+			<if test="role != null">
+				role = #{role},
+			</if>
+		</set>
+		<include refid="conditionPK" />
+	</update>
+
+	<update id="updateAll" parameterType="com.linkgoo.framework.web.entity.doc.Doctor">
+		update
+		<include refid="table" />
+		<set>
+			username = #{username,jdbcType=VARCHAR},
+			real_name = #{realName,jdbcType=VARCHAR},
+			password = #{password,jdbcType=VARCHAR},
+			sex = #{sex,jdbcType=VARCHAR},
+			age = #{age,jdbcType=VARCHAR},
+			phone = #{phone,jdbcType=VARCHAR},
+			address = #{address,jdbcType=VARCHAR},
+			role = #{role,jdbcType=INTEGER}
+		</set>
+		<include refid="conditionPK" />
+	</update>
+
+	<update id="updateList" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+         update
+         	<include refid="table" />
+			<set>
+				<if test="item.username != null">
+					username = #{item.username},
+				</if>
+				<if test="item.realName != null">
+					real_name = #{item.realName},
+				</if>
+				<if test="item.password != null">
+					password = #{item.password},
+				</if>
+				<if test="item.sex != null">
+					sex = #{item.sex},
+				</if>
+				<if test="item.age != null">
+					age = #{item.age},
+				</if>
+				<if test="item.phone != null">
+					phone = #{item.phone},
+				</if>
+				<if test="item.address != null">
+					address = #{item.address},
+				</if>
+				<if test="item.role != null">
+					role = #{item.role}
+				</if>
+			</set>
+			<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				AND id = #{item.id}
+			</trim>
+         </foreach>
+	</update>
+
+    <update id="updateAllList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update
+            <include refid="table" />
+			<set>
+					username = #{item.username,jdbcType=VARCHAR},
+					real_name = #{item.realName,jdbcType=VARCHAR},
+					password = #{item.password,jdbcType=VARCHAR},
+					sex = #{item.sex,jdbcType=VARCHAR},
+					age = #{item.age,jdbcType=VARCHAR},
+					phone = #{item.phone,jdbcType=VARCHAR},
+					address = #{item.address,jdbcType=VARCHAR},
+					role = #{item.role,jdbcType=INTEGER}
+			</set>
+            <trim prefix="WHERE" prefixOverrides="AND |OR ">
+                AND id = #{item.id}
+            </trim>
+        </foreach>
+    </update>
+
+    <update id="modify">
+        update
+        <include refid="table" />
+        <set>
+            <if test="myNew.username != null">
+			username = #{myNew.username},
+            </if>
+            <if test="myNew.realName != null">
+			real_name = #{myNew.realName},
+            </if>
+            <if test="myNew.password != null">
+			password = #{myNew.password},
+            </if>
+            <if test="myNew.sex != null">
+			sex = #{myNew.sex},
+            </if>
+            <if test="myNew.age != null">
+			age = #{myNew.age},
+            </if>
+            <if test="myNew.phone != null">
+			phone = #{myNew.phone},
+            </if>
+            <if test="myNew.address != null">
+			address = #{myNew.address},
+            </if>
+            <if test="myNew.role != null">
+			role = #{myNew.role},
+            </if>
+        </set>
+		<where>
+            <if test="old.username != null">
+            	and username = #{old.username}
+            </if>
+            <if test="old.realName != null">
+            	and real_name = #{old.realName}
+            </if>
+            <if test="old.password != null">
+            	and password = #{old.password}
+            </if>
+            <if test="old.sex != null">
+            	and sex = #{old.sex}
+            </if>
+            <if test="old.age != null">
+            	and age = #{old.age}
+            </if>
+            <if test="old.phone != null">
+            	and phone = #{old.phone}
+            </if>
+            <if test="old.address != null">
+            	and address = #{old.address}
+            </if>
+            <if test="old.role != null">
+            	and role = #{old.role}
+            </if>
+		</where>
+    </update>
+
+	<delete id="remove" parameterType="com.linkgoo.framework.web.entity.doc.Doctor">
+		delete from
+		<include refid="table" />
+		<include refid="condition" />
+	</delete>
+	<delete id="removeAll">
+		delete from
+		<include refid="table" />
+	</delete>
+
+
+	<delete id="deleteById" parameterType="Long">
+		delete from
+		<include refid="table" />
+		<include refid="conditionPK" />
+	</delete>
+
+	<delete id="deleteByIds" parameterType="list">
+		delete from
+		<include refid="table" />
+		<include refid="moreConditionPK" />
+	</delete>
+	<select id="getById" resultMap="doctorMap" parameterType="Long">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="conditionPK" />
+	</select>
+	<select id="getOne" resultMap="doctorMap"
+		parameterType="com.linkgoo.framework.web.entity.doc.Doctor">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+	<select id="count" resultType="java.lang.Integer"
+		parameterType="com.linkgoo.framework.web.entity.doc.Doctor">
+		select
+		count(1)
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+
+
+	<select id="countAll" resultType="java.lang.Integer">
+		select
+		count(1)
+		from
+		<include refid="table" />
+	</select>
+
+	<select id="existsById"  resultType="java.lang.Boolean" parameterType="Long">
+		select
+		1
+		from
+		<include refid="table" />
+		<include refid="conditionPK" />
+	</select>
+
+	<select id="findAll" resultMap="doctorMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+	</select>
+	<select id="find" resultMap="doctorMap" parameterType="com.linkgoo.framework.web.entity.doc.Doctor">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+
+	<select id="findByMap" parameterType="java.util.Map" resultMap="doctorMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="map.keys" item="key">
+				<if test="map[key] != null and !map[key].equals('')">
+					AND ${key} = #{map[${key}]}
+				</if>
+			</foreach>
+		</trim>
+	</select>
+
+	<select id="findByIds" parameterType="java.util.List"
+		resultMap="doctorMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="moreConditionPK" />
+	</select>
+
+	<select id="findByCriteria" parameterType="java.util.Map" resultMap="doctorMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="list" item="item" index="index">
+				<choose>
+					<when test="item.op == 'in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<when test="item.op == 'not in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<otherwise>
+						AND ${item.field} ${item.op} #{list[${index}].value}
+					</otherwise>
+				</choose>
+			</foreach>
+		</trim>
+	</select>
+	<select id="page" resultMap="doctorMap" parameterType="com.linkgoo.framework.web.entity.doc.Doctor">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+
+	<select id="pageByMap" parameterType="java.util.Map" resultMap="doctorMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="map.keys" item="key">
+				<if test="map[key] != null and !map[key].equals('')">
+					AND ${key} = #{map[${key}]}
+				</if>
+			</foreach>
+		</trim>
+	</select>
+
+	<select id="pageByCriteria" parameterType="java.util.Map" resultMap="doctorMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="list" item="item" index="index">
+				<choose>
+					<when test="item.op == 'in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<when test="item.op == 'not in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<otherwise>
+						AND ${item.field} ${item.op} #{list[${index}].value}
+					</otherwise>
+				</choose>
+			</foreach>
+		</trim>
+	</select>
+
+
+
+
+</mapper>

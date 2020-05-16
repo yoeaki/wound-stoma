@@ -1,0 +1,113 @@
+
+#代码生成器配置
+code.generation:
+  #变量：项目相关路径  可自行配置
+  projectPath: D:\woundStoma\stc
+  #变量：项目相关路径  可自行配置
+  basePath: D:\woundStoma\stc\stc-web-service
+  #变量：项目相关路径  可自行配置
+  basePackagePath: com/linkgoo/framework/web
+  #变量：模板文件夹
+  templateDirectory: ${code.generation.projectPath}/stc-utils/stc-utils-generation/src/main/resources/tmpl/
+
+  #输入文件
+  inputFilePath: ${code.generation.projectPath}/stc-utils/stc-utils-generation/test.txt
+  #  #输入文件文字编码 默认UTF8
+  inputFileCharacterCoding: UTF-8
+  #输出文件文字编码 默认UTF8
+  outputFileCharacterCoding: UTF-8
+  # 版权 公司
+  company: yuanxilong
+  # 作者
+  author: yoeaki
+  #数据库前缀
+  tablePrefix:
+  #数据库方言
+  sqlDialect: MySQLDialect
+  #数据库路径
+  sqlPath: com.linkgoo.framework.utils.generation.config.dialect
+  #基础包路径
+  baseClassPath: com.linkgoo.framework
+
+
+  #模板配置 generationPackage不指定的话会根据 src/main/java 下的路径自动生成  cover 默认不覆盖
+  templates:
+#    name:
+#      templateName: 模板名
+#      templateDirectory: 生产代码的模板路径
+#      generationPath: 生成代码的存放路径
+#      generationNameSuffix: 生成代码的文件后缀
+#      cover: 是否覆盖
+    entity:
+      templateName: Entity
+      templateDirectory: ${code.generation.templateDirectory}
+      generationPath: ${code.generation.basePath}/src/main/java/${code.generation.basePackagePath}/entity/
+      generationNameSuffix: .java
+      cover: true
+    repository:
+      templateName: Repository
+      templateDirectory: ${code.generation.templateDirectory}
+      generationPath: ${code.generation.basePath}/src/main/java/${code.generation.basePackagePath}/repository/
+      generationNameSuffix: Repository.java
+      cover: true
+    repositoryExt:
+      templateName: RepositoryExt
+      templateDirectory: ${code.generation.templateDirectory}
+      generationPath: ${code.generation.basePath}/src/main/java/${code.generation.basePackagePath}/repository/
+      generationNameSuffix: RepositoryExt.java
+    repositoryXml:
+      templateName: RepositoryXml
+      templateDirectory: ${code.generation.templateDirectory}
+      generationPath: ${code.generation.basePath}/src/main/resources/mapper/
+      generationNameSuffix: Repository.xml
+      cover: true
+    repositoryExtXml:
+      templateName: RepositoryExtXml
+      templateDirectory: ${code.generation.templateDirectory}
+      generationPath: ${code.generation.basePath}/src/main/resources/mapper/
+      generationNameSuffix: RepositoryExt.xml
+    controller:
+      templateName: Controller
+      templateDirectory: ${code.generation.templateDirectory}
+      generationPath: ${code.generation.basePath}/src/main/java/${code.generation.basePackagePath}/controller/
+      generationNameSuffix: Controller.java
+      cover: false
+    service:
+      templateName: Service
+      templateDirectory: ${code.generation.templateDirectory}
+      generationPath: ${code.generation.basePath}/src/main/java/${code.generation.basePackagePath}/service/
+      generationNameSuffix: Service.java
+      cover: false
+    serviceImpl:
+      templateName: ServiceImpl
+      templateDirectory: ${code.generation.templateDirectory}
+      generationPath: ${code.generation.basePath}/src/main/java/${code.generation.basePackagePath}/service/impl/
+      generationNameSuffix: ServiceImpl.java
+      cover: false
+
+    #SQL 生产模板
+    mysql:
+      templateName: mysql
+      templateDirectory: ${code.generation.templateDirectory}/sql
+      generationPath: ${code.generation.basePath}/src/main/resources/sql/mysql/
+      generationNameSuffix: .sql
+      cover: true
+    sqlServer:
+      templateName: sqlserver
+      templateDirectory: ${code.generation.templateDirectory}/sql
+      generationPath: ${code.generation.basePath}/src/main/resources/sql/sqlserver/
+      generationNameSuffix: .sql
+      cover: true
+    oracle:
+      templateName: oracle
+      templateDirectory: ${code.generation.templateDirectory}/sql
+      generationPath: ${code.generation.basePath}/src/main/resources/sql/oracle/
+      generationNameSuffix: .sql
+      cover: true
+    h2:
+      templateName: h2
+      templateDirectory: ${code.generation.templateDirectory}/sql
+      generationPath: ${code.generation.basePath}/src/main/resources/sql/h2/
+      generationNameSuffix: .sql
+      cover: true
+

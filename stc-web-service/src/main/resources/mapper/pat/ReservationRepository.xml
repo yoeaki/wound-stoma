@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.linkgoo.framework.web.repository.pat.ReservationRepository">
+
+
+
+	<resultMap id="reservationMap" type="com.linkgoo.framework.web.entity.pat.Reservation">
+		<id column="id" property="id" />		<!-- id -->
+		<result column="patient_id" property="patientId" />		<!-- 用户id -->
+		<result column="doctor_id" property="doctorId" />		<!-- 医生id -->
+		<result column="reservation_time" property="reservationTime" />		<!-- 预约时间 -->
+		<result column="remarks" property="remarks" />		<!-- 备注信息 -->
+		<result column="schedule" property="schedule" />		<!-- 预约进度 -->
+	</resultMap>
+
+
+	<sql id="allColumns">
+		id,patient_id,doctor_id,reservation_time,remarks,schedule
+	</sql>
+	<sql id="columns">
+		id,patient_id,doctor_id,reservation_time,remarks,schedule
+	</sql>
+	<sql id="table">
+		pat_reservation
+	</sql>
+	<sql id="condition">
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="patientId != null">
+				AND patient_id = #{patientId}
+			</if>
+			<if test="doctorId != null">
+				AND doctor_id = #{doctorId}
+			</if>
+			<if test="reservationTime != null">
+				AND reservation_time = #{reservationTime}
+			</if>
+			<if test="remarks != null">
+				AND remarks = #{remarks}
+			</if>
+			<if test="schedule != null">
+				AND schedule = #{schedule}
+			</if>
+		</trim>
+	</sql>
+	<sql id="conditionPK">
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				AND id = #{id}
+		</trim>
+	</sql>
+	<sql id="moreConditionPK">
+		WHERE id in
+		<trim prefix="(" suffix=")">
+			<foreach collection="ids" item="item" separator=",">
+				#{item}
+			</foreach>
+		</trim>
+	</sql>
+
+	<insert id="save" parameterType="com.linkgoo.framework.web.entity.pat.Reservation" >
+		insert into
+		<include refid="table" />
+		(
+		<include refid="columns" />
+		)
+		values
+		(#{id,jdbcType=BIGINT},#{patientId,jdbcType=BIGINT},#{doctorId,jdbcType=BIGINT},#{reservationTime,jdbcType=TIMESTAMP},
+		#{remarks,jdbcType=VARCHAR},#{schedule,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="saveList" parameterType="java.util.List" useGeneratedKeys="true">
+		insert into
+		<include refid="table" />
+		(
+		<include refid="columns" />
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id,jdbcType=BIGINT},#{item.patientId,jdbcType=BIGINT},#{item.doctorId,jdbcType=BIGINT},#{item.reservationTime,jdbcType=TIMESTAMP},
+		#{item.remarks,jdbcType=VARCHAR},#{item.schedule,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="com.linkgoo.framework.web.entity.pat.Reservation">
+		update
+		<include refid="table" />
+		<set>
+			<if test="patientId != null">
+				patient_id = #{patientId},
+			</if>
+			<if test="doctorId != null">
+				doctor_id = #{doctorId},
+			</if>
+			<if test="reservationTime != null">
+				reservation_time = #{reservationTime},
+			</if>
+			<if test="remarks != null">
+				remarks = #{remarks},
+			</if>
+			<if test="schedule != null">
+				schedule = #{schedule},
+			</if>
+		</set>
+		<include refid="conditionPK" />
+	</update>
+
+	<update id="updateAll" parameterType="com.linkgoo.framework.web.entity.pat.Reservation">
+		update
+		<include refid="table" />
+		<set>
+			patient_id = #{patientId,jdbcType=BIGINT},
+			doctor_id = #{doctorId,jdbcType=BIGINT},
+			reservation_time = #{reservationTime,jdbcType=TIMESTAMP},
+			remarks = #{remarks,jdbcType=VARCHAR},
+			schedule = #{schedule,jdbcType=VARCHAR}
+		</set>
+		<include refid="conditionPK" />
+	</update>
+
+	<update id="updateList" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+         update
+         	<include refid="table" />
+			<set>
+				<if test="item.patientId != null">
+					patient_id = #{item.patientId},
+				</if>
+				<if test="item.doctorId != null">
+					doctor_id = #{item.doctorId},
+				</if>
+				<if test="item.reservationTime != null">
+					reservation_time = #{item.reservationTime},
+				</if>
+				<if test="item.remarks != null">
+					remarks = #{item.remarks},
+				</if>
+				<if test="item.schedule != null">
+					schedule = #{item.schedule}
+				</if>
+			</set>
+			<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				AND id = #{item.id}
+			</trim>
+         </foreach>
+	</update>
+
+    <update id="updateAllList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update
+            <include refid="table" />
+			<set>
+					patient_id = #{item.patientId,jdbcType=BIGINT},
+					doctor_id = #{item.doctorId,jdbcType=BIGINT},
+					reservation_time = #{item.reservationTime,jdbcType=TIMESTAMP},
+					remarks = #{item.remarks,jdbcType=VARCHAR},
+					schedule = #{item.schedule,jdbcType=VARCHAR}
+			</set>
+            <trim prefix="WHERE" prefixOverrides="AND |OR ">
+                AND id = #{item.id}
+            </trim>
+        </foreach>
+    </update>
+
+    <update id="modify">
+        update
+        <include refid="table" />
+        <set>
+            <if test="myNew.patientId != null">
+			patient_id = #{myNew.patientId},
+            </if>
+            <if test="myNew.doctorId != null">
+			doctor_id = #{myNew.doctorId},
+            </if>
+            <if test="myNew.reservationTime != null">
+			reservation_time = #{myNew.reservationTime},
+            </if>
+            <if test="myNew.remarks != null">
+			remarks = #{myNew.remarks},
+            </if>
+            <if test="myNew.schedule != null">
+			schedule = #{myNew.schedule},
+            </if>
+        </set>
+		<where>
+            <if test="old.patientId != null">
+            	and patient_id = #{old.patientId}
+            </if>
+            <if test="old.doctorId != null">
+            	and doctor_id = #{old.doctorId}
+            </if>
+            <if test="old.reservationTime != null">
+            	and reservation_time = #{old.reservationTime}
+            </if>
+            <if test="old.remarks != null">
+            	and remarks = #{old.remarks}
+            </if>
+            <if test="old.schedule != null">
+            	and schedule = #{old.schedule}
+            </if>
+		</where>
+    </update>
+
+	<delete id="remove" parameterType="com.linkgoo.framework.web.entity.pat.Reservation">
+		delete from
+		<include refid="table" />
+		<include refid="condition" />
+	</delete>
+	<delete id="removeAll">
+		delete from
+		<include refid="table" />
+	</delete>
+
+
+	<delete id="deleteById" parameterType="Long">
+		delete from
+		<include refid="table" />
+		<include refid="conditionPK" />
+	</delete>
+
+	<delete id="deleteByIds" parameterType="list">
+		delete from
+		<include refid="table" />
+		<include refid="moreConditionPK" />
+	</delete>
+	<select id="getById" resultMap="reservationMap" parameterType="Long">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="conditionPK" />
+	</select>
+	<select id="getOne" resultMap="reservationMap"
+		parameterType="com.linkgoo.framework.web.entity.pat.Reservation">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+	<select id="count" resultType="java.lang.Integer"
+		parameterType="com.linkgoo.framework.web.entity.pat.Reservation">
+		select
+		count(1)
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+
+
+	<select id="countAll" resultType="java.lang.Integer">
+		select
+		count(1)
+		from
+		<include refid="table" />
+	</select>
+
+	<select id="existsById"  resultType="java.lang.Boolean" parameterType="Long">
+		select
+		1
+		from
+		<include refid="table" />
+		<include refid="conditionPK" />
+	</select>
+
+	<select id="findAll" resultMap="reservationMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+	</select>
+	<select id="find" resultMap="reservationMap" parameterType="com.linkgoo.framework.web.entity.pat.Reservation">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+
+	<select id="findByMap" parameterType="java.util.Map" resultMap="reservationMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="map.keys" item="key">
+				<if test="map[key] != null and !map[key].equals('')">
+					AND ${key} = #{map[${key}]}
+				</if>
+			</foreach>
+		</trim>
+	</select>
+
+	<select id="findByIds" parameterType="java.util.List"
+		resultMap="reservationMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="moreConditionPK" />
+	</select>
+
+	<select id="findByCriteria" parameterType="java.util.Map" resultMap="reservationMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="list" item="item" index="index">
+				<choose>
+					<when test="item.op == 'in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<when test="item.op == 'not in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<otherwise>
+						AND ${item.field} ${item.op} #{list[${index}].value}
+					</otherwise>
+				</choose>
+			</foreach>
+		</trim>
+	</select>
+	<select id="page" resultMap="reservationMap" parameterType="com.linkgoo.framework.web.entity.pat.Reservation">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+
+	<select id="pageByMap" parameterType="java.util.Map" resultMap="reservationMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="map.keys" item="key">
+				<if test="map[key] != null and !map[key].equals('')">
+					AND ${key} = #{map[${key}]}
+				</if>
+			</foreach>
+		</trim>
+	</select>
+
+	<select id="pageByCriteria" parameterType="java.util.Map" resultMap="reservationMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="list" item="item" index="index">
+				<choose>
+					<when test="item.op == 'in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<when test="item.op == 'not in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<otherwise>
+						AND ${item.field} ${item.op} #{list[${index}].value}
+					</otherwise>
+				</choose>
+			</foreach>
+		</trim>
+	</select>
+
+
+
+
+</mapper>

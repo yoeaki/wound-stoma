@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.linkgoo.repository.ep2.InstallListRepository">
+
+
+
+	<resultMap id="installListMap" type="com.linkgoo.entity.ep2.InstallList">
+		<id column="id" property="id" />		<!-- id -->
+		<result column="employee_no" property="employeeNo" />		<!-- 员工号 -->
+		<result column="first_login" property="firstLogin" />		<!-- 首次登录时间 -->
+		<result column="app_name" property="appName" />		<!-- 应用 -->
+		<result column="name" property="name" />		<!-- 姓名 -->
+		<result column="region" property="region" />		<!-- 区域 -->
+		<result column="branch" property="branch" />		<!-- 分厂 -->
+		<result column="department" property="department" />		<!-- 部门 -->
+		<result column="type" property="type" />		<!-- 员工类型 -->
+		<result column="status" property="status" />		<!-- 状态 -->
+		<result column="sync_date" property="syncDate" />		<!-- 同步时间 -->
+	</resultMap>
+
+
+	<sql id="allColumns">
+		id,employee_no,first_login,app_name,name,region,branch,department,type,status,sync_date
+	</sql>
+	<sql id="columns">
+		id,employee_no,first_login,app_name,name,region,branch,department,type,status,
+		sync_date
+	</sql>
+	<sql id="table">
+		install_list
+	</sql>
+	<sql id="condition">
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="employeeNo != null">
+				AND employee_no = #{employeeNo}
+			</if>
+			<if test="firstLogin != null">
+				AND first_login = #{firstLogin}
+			</if>
+			<if test="appName != null">
+				AND app_name = #{appName}
+			</if>
+			<if test="name != null">
+				AND name = #{name}
+			</if>
+			<if test="region != null">
+				AND region = #{region}
+			</if>
+			<if test="branch != null">
+				AND branch = #{branch}
+			</if>
+			<if test="department != null">
+				AND department = #{department}
+			</if>
+			<if test="type != null">
+				AND type = #{type}
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+			<if test="syncDate != null">
+				AND sync_date = #{syncDate}
+			</if>
+		</trim>
+	</sql>
+	<sql id="conditionPK">
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				AND id = #{id}
+		</trim>
+	</sql>
+	<sql id="moreConditionPK">
+		WHERE id in
+		<trim prefix="(" suffix=")">
+			<foreach collection="ids" item="item" separator=",">
+				#{item}
+			</foreach>
+		</trim>
+	</sql>
+
+	<insert id="save" parameterType="com.linkgoo.entity.ep2.InstallList" >
+		insert into
+		<include refid="table" />
+		(
+		<include refid="columns" />
+		)
+		values
+		(#{id,jdbcType=>BIGINT},#{employeeNo,jdbcType=>VARCHAR},#{firstLogin,jdbcType=>TIMESTAMP},#{appName,jdbcType=>VARCHAR},
+		#{name,jdbcType=>VARCHAR},#{region,jdbcType=>VARCHAR},#{branch,jdbcType=>VARCHAR},#{department,jdbcType=>VARCHAR},
+		#{type,jdbcType=>VARCHAR},#{status,jdbcType=>VARCHAR},#{syncDate,jdbcType=>TIMESTAMP}
+		)
+	</insert>
+	<insert id="saveList" parameterType="java.util.List" useGeneratedKeys="true">
+		insert into
+		<include refid="table" />
+		(
+		<include refid="columns" />
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id,jdbcType=BIGINT},#{item.employeeNo,jdbcType=VARCHAR},#{item.firstLogin,jdbcType=TIMESTAMP},#{item.appName,jdbcType=VARCHAR},
+		#{item.name,jdbcType=VARCHAR},#{item.region,jdbcType=VARCHAR},#{item.branch,jdbcType=VARCHAR},#{item.department,jdbcType=VARCHAR},
+		#{item.type,jdbcType=VARCHAR},#{item.status,jdbcType=VARCHAR},#{item.syncDate,jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="com.linkgoo.entity.ep2.InstallList">
+		update
+		<include refid="table" />
+		<set>
+			<if test="employeeNo != null">
+				employee_no = #{employeeNo},
+			</if>
+			<if test="firstLogin != null">
+				first_login = #{firstLogin},
+			</if>
+			<if test="appName != null">
+				app_name = #{appName},
+			</if>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="region != null">
+				region = #{region},
+			</if>
+			<if test="branch != null">
+				branch = #{branch},
+			</if>
+			<if test="department != null">
+				department = #{department},
+			</if>
+			<if test="type != null">
+				type = #{type},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="syncDate != null">
+				sync_date = #{syncDate},
+			</if>
+		</set>
+		<include refid="conditionPK" />
+	</update>
+
+	<update id="updateAll" parameterType="com.linkgoo.entity.ep2.InstallList">
+		update
+		<include refid="table" />
+		<set>
+			employee_no = #{employeeNo,jdbcType=VARCHAR},
+			first_login = #{firstLogin,jdbcType=TIMESTAMP},
+			app_name = #{appName,jdbcType=VARCHAR},
+			name = #{name,jdbcType=VARCHAR},
+			region = #{region,jdbcType=VARCHAR},
+			branch = #{branch,jdbcType=VARCHAR},
+			department = #{department,jdbcType=VARCHAR},
+			type = #{type,jdbcType=VARCHAR},
+			status = #{status,jdbcType=VARCHAR},
+			sync_date = #{syncDate,jdbcType=TIMESTAMP}
+		</set>
+		<include refid="conditionPK" />
+	</update>
+
+	<update id="updateList" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+         update
+         	<include refid="table" />
+			<set>
+				<if test="item.employeeNo != null">
+					employee_no = #{item.employeeNo},
+				</if>
+				<if test="item.firstLogin != null">
+					first_login = #{item.firstLogin},
+				</if>
+				<if test="item.appName != null">
+					app_name = #{item.appName},
+				</if>
+				<if test="item.name != null">
+					name = #{item.name},
+				</if>
+				<if test="item.region != null">
+					region = #{item.region},
+				</if>
+				<if test="item.branch != null">
+					branch = #{item.branch},
+				</if>
+				<if test="item.department != null">
+					department = #{item.department},
+				</if>
+				<if test="item.type != null">
+					type = #{item.type},
+				</if>
+				<if test="item.status != null">
+					status = #{item.status},
+				</if>
+				<if test="item.syncDate != null">
+					sync_date = #{item.syncDate}
+				</if>
+			</set>
+			<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				AND id = #{item.id}
+			</trim>
+         </foreach>
+	</update>
+
+    <update id="updateAllList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update
+            <include refid="table" />
+			<set>
+					employee_no = #{item.employeeNo,jdbcType=VARCHAR},
+					first_login = #{item.firstLogin,jdbcType=TIMESTAMP},
+					app_name = #{item.appName,jdbcType=VARCHAR},
+					name = #{item.name,jdbcType=VARCHAR},
+					region = #{item.region,jdbcType=VARCHAR},
+					branch = #{item.branch,jdbcType=VARCHAR},
+					department = #{item.department,jdbcType=VARCHAR},
+					type = #{item.type,jdbcType=VARCHAR},
+					status = #{item.status,jdbcType=VARCHAR},
+					sync_date = #{item.syncDate,jdbcType=TIMESTAMP}
+			</set>
+            <trim prefix="WHERE" prefixOverrides="AND |OR ">
+                AND id = #{item.id}
+            </trim>
+        </foreach>
+    </update>
+
+    <update id="modify">
+        update
+        <include refid="table" />
+        <set>
+            <if test="myNew.employeeNo != null">
+			employee_no = #{myNew.employeeNo},
+            </if>
+            <if test="myNew.firstLogin != null">
+			first_login = #{myNew.firstLogin},
+            </if>
+            <if test="myNew.appName != null">
+			app_name = #{myNew.appName},
+            </if>
+            <if test="myNew.name != null">
+			name = #{myNew.name},
+            </if>
+            <if test="myNew.region != null">
+			region = #{myNew.region},
+            </if>
+            <if test="myNew.branch != null">
+			branch = #{myNew.branch},
+            </if>
+            <if test="myNew.department != null">
+			department = #{myNew.department},
+            </if>
+            <if test="myNew.type != null">
+			type = #{myNew.type},
+            </if>
+            <if test="myNew.status != null">
+			status = #{myNew.status},
+            </if>
+            <if test="myNew.syncDate != null">
+			sync_date = #{myNew.syncDate},
+            </if>
+        </set>
+		<where>
+            <if test="old.employeeNo != null">
+            	and employee_no = #{old.employeeNo}
+            </if>
+            <if test="old.firstLogin != null">
+            	and first_login = #{old.firstLogin}
+            </if>
+            <if test="old.appName != null">
+            	and app_name = #{old.appName}
+            </if>
+            <if test="old.name != null">
+            	and name = #{old.name}
+            </if>
+            <if test="old.region != null">
+            	and region = #{old.region}
+            </if>
+            <if test="old.branch != null">
+            	and branch = #{old.branch}
+            </if>
+            <if test="old.department != null">
+            	and department = #{old.department}
+            </if>
+            <if test="old.type != null">
+            	and type = #{old.type}
+            </if>
+            <if test="old.status != null">
+            	and status = #{old.status}
+            </if>
+            <if test="old.syncDate != null">
+            	and sync_date = #{old.syncDate}
+            </if>
+		</where>
+    </update>
+
+	<delete id="remove" parameterType="com.linkgoo.entity.ep2.InstallList">
+		delete from
+		<include refid="table" />
+		<include refid="condition" />
+	</delete>
+	<delete id="removeAll">
+		delete from
+		<include refid="table" />
+	</delete>
+
+
+	<delete id="delete" parameterType="Long">
+		delete from
+		<include refid="table" />
+		<include refid="conditionPK" />
+	</delete>
+
+	<delete id="deleteByIds" parameterType="list">
+		delete from
+		<include refid="table" />
+		<include refid="moreConditionPK" />
+	</delete>
+	<select id="get" resultMap="installListMap" parameterType="Long">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="conditionPK" />
+	</select>
+	<select id="getOne" resultMap="installListMap"
+		parameterType="com.linkgoo.entity.ep2.InstallList">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+	<select id="count" resultType="java.lang.Integer"
+		parameterType="com.linkgoo.entity.ep2.InstallList">
+		select
+		count(1)
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+
+
+	<select id="countAll" resultType="java.lang.Integer">
+		select
+		count(1)
+		from
+		<include refid="table" />
+	</select>
+
+	<select id="exists"  resultType="java.lang.Boolean" parameterType="Long">
+		select
+		1
+		from
+		<include refid="table" />
+		<include refid="conditionPK" />
+	</select>
+
+	<select id="findAll" resultMap="installListMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+	</select>
+	<select id="find" resultMap="installListMap" parameterType="com.linkgoo.entity.ep2.InstallList">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+
+	<select id="findByMap" parameterType="java.util.Map" resultMap="installListMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="map.keys" item="key">
+				<if test="map[key] != null and !map[key].equals('')">
+					AND ${key} = #{map[${key}]}
+				</if>
+			</foreach>
+		</trim>
+	</select>
+
+	<select id="findByList" parameterType="java.util.List"
+		resultMap="installListMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="moreConditionPK" />
+	</select>
+
+	<select id="findByCriteria" parameterType="java.util.Map" resultMap="installListMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="list" item="item" index="index">
+				<choose>
+					<when test="item.op == 'in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<when test="item.op == 'not in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<otherwise>
+						AND ${item.field} ${item.op} #{list[${index}].value}
+					</otherwise>
+				</choose>
+			</foreach>
+		</trim>
+	</select>
+
+
+	<select id="queryByCriteria" parameterType="java.util.Map" resultMap="installListMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="list" item="item" index="index">
+				<choose>
+					<when test="item.op == 'in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<when test="item.op == 'not in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<otherwise>
+						AND ${item.field} ${item.op} #{list[${index}].value}
+					</otherwise>
+				</choose>
+			</foreach>
+		</trim>
+	</select>
+
+</mapper>

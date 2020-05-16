@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.linkgoo.framework.web.repository.dis.DiseaseRepository">
+
+
+
+	<resultMap id="diseaseMap" type="com.linkgoo.framework.web.entity.dis.Disease">
+		<id column="id" property="id" />		<!-- 疾病id -->
+		<result column="disease_name" property="diseaseName" />		<!-- 疾病名称 -->
+	</resultMap>
+
+
+	<sql id="allColumns">
+		id,disease_name
+	</sql>
+	<sql id="columns">
+		id,disease_name
+	</sql>
+	<sql id="table">
+		dis_disease
+	</sql>
+	<sql id="condition">
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="diseaseName != null">
+				AND disease_name = #{diseaseName}
+			</if>
+		</trim>
+	</sql>
+	<sql id="conditionPK">
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				AND id = #{id}
+		</trim>
+	</sql>
+	<sql id="moreConditionPK">
+		WHERE id in
+		<trim prefix="(" suffix=")">
+			<foreach collection="ids" item="item" separator=",">
+				#{item}
+			</foreach>
+		</trim>
+	</sql>
+
+	<insert id="save" parameterType="com.linkgoo.framework.web.entity.dis.Disease" >
+		insert into
+		<include refid="table" />
+		(
+		<include refid="columns" />
+		)
+		values
+		(#{id,jdbcType=BIGINT},#{diseaseName,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="saveList" parameterType="java.util.List" useGeneratedKeys="true">
+		insert into
+		<include refid="table" />
+		(
+		<include refid="columns" />
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id,jdbcType=BIGINT},#{item.diseaseName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="com.linkgoo.framework.web.entity.dis.Disease">
+		update
+		<include refid="table" />
+		<set>
+			<if test="diseaseName != null">
+				disease_name = #{diseaseName},
+			</if>
+		</set>
+		<include refid="conditionPK" />
+	</update>
+
+	<update id="updateAll" parameterType="com.linkgoo.framework.web.entity.dis.Disease">
+		update
+		<include refid="table" />
+		<set>
+			disease_name = #{diseaseName,jdbcType=VARCHAR}
+		</set>
+		<include refid="conditionPK" />
+	</update>
+
+	<update id="updateList" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+         update
+         	<include refid="table" />
+			<set>
+				<if test="item.diseaseName != null">
+					disease_name = #{item.diseaseName}
+				</if>
+			</set>
+			<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				AND id = #{item.id}
+			</trim>
+         </foreach>
+	</update>
+
+    <update id="updateAllList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update
+            <include refid="table" />
+			<set>
+					disease_name = #{item.diseaseName,jdbcType=VARCHAR}
+			</set>
+            <trim prefix="WHERE" prefixOverrides="AND |OR ">
+                AND id = #{item.id}
+            </trim>
+        </foreach>
+    </update>
+
+    <update id="modify">
+        update
+        <include refid="table" />
+        <set>
+            <if test="myNew.diseaseName != null">
+			disease_name = #{myNew.diseaseName},
+            </if>
+        </set>
+		<where>
+            <if test="old.diseaseName != null">
+            	and disease_name = #{old.diseaseName}
+            </if>
+		</where>
+    </update>
+
+	<delete id="remove" parameterType="com.linkgoo.framework.web.entity.dis.Disease">
+		delete from
+		<include refid="table" />
+		<include refid="condition" />
+	</delete>
+	<delete id="removeAll">
+		delete from
+		<include refid="table" />
+	</delete>
+
+
+	<delete id="deleteById" parameterType="Long">
+		delete from
+		<include refid="table" />
+		<include refid="conditionPK" />
+	</delete>
+
+	<delete id="deleteByIds" parameterType="list">
+		delete from
+		<include refid="table" />
+		<include refid="moreConditionPK" />
+	</delete>
+	<select id="getById" resultMap="diseaseMap" parameterType="Long">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="conditionPK" />
+	</select>
+	<select id="getOne" resultMap="diseaseMap"
+		parameterType="com.linkgoo.framework.web.entity.dis.Disease">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+	<select id="count" resultType="java.lang.Integer"
+		parameterType="com.linkgoo.framework.web.entity.dis.Disease">
+		select
+		count(1)
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+
+
+	<select id="countAll" resultType="java.lang.Integer">
+		select
+		count(1)
+		from
+		<include refid="table" />
+	</select>
+
+	<select id="existsById"  resultType="java.lang.Boolean" parameterType="Long">
+		select
+		1
+		from
+		<include refid="table" />
+		<include refid="conditionPK" />
+	</select>
+
+	<select id="findAll" resultMap="diseaseMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+	</select>
+	<select id="find" resultMap="diseaseMap" parameterType="com.linkgoo.framework.web.entity.dis.Disease">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+
+	<select id="findByMap" parameterType="java.util.Map" resultMap="diseaseMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="map.keys" item="key">
+				<if test="map[key] != null and !map[key].equals('')">
+					AND ${key} = #{map[${key}]}
+				</if>
+			</foreach>
+		</trim>
+	</select>
+
+	<select id="findByIds" parameterType="java.util.List"
+		resultMap="diseaseMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="moreConditionPK" />
+	</select>
+
+	<select id="findByCriteria" parameterType="java.util.Map" resultMap="diseaseMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="list" item="item" index="index">
+				<choose>
+					<when test="item.op == 'in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<when test="item.op == 'not in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<otherwise>
+						AND ${item.field} ${item.op} #{list[${index}].value}
+					</otherwise>
+				</choose>
+			</foreach>
+		</trim>
+	</select>
+	<select id="page" resultMap="diseaseMap" parameterType="com.linkgoo.framework.web.entity.dis.Disease">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<include refid="condition" />
+	</select>
+
+	<select id="pageByMap" parameterType="java.util.Map" resultMap="diseaseMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="map.keys" item="key">
+				<if test="map[key] != null and !map[key].equals('')">
+					AND ${key} = #{map[${key}]}
+				</if>
+			</foreach>
+		</trim>
+	</select>
+
+	<select id="pageByCriteria" parameterType="java.util.Map" resultMap="diseaseMap">
+		select
+		<include refid="allColumns" />
+		from
+		<include refid="table" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<foreach collection="list" item="item" index="index">
+				<choose>
+					<when test="item.op == 'in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<when test="item.op == 'not in'">
+						AND ${item.field} ${item.op}
+						<foreach item="obj" collection="item.value" index="idx" open="(" separator="," close=")">
+							#{list[${index}].value[${idx}]}
+			        	</foreach>
+					</when>
+					<otherwise>
+						AND ${item.field} ${item.op} #{list[${index}].value}
+					</otherwise>
+				</choose>
+			</foreach>
+		</trim>
+	</select>
+
+
+
+
+</mapper>
