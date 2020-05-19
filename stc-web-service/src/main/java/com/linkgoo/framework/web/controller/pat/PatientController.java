@@ -154,13 +154,31 @@ public class PatientController extends
 		aCase.setPatientId(patientId);
 		List<Case> cases = caseService.find(aCase);
 
+		Map<Object,String> disaseMap = new HashMap<>();
+		Map<Object,String> doctorMap = new HashMap<>();
 		List<CaseVo> caseVos = cases.stream().map(e -> {
 			CaseVo caseVo = new CaseVo();
 			BeanUtils.copyProperties(e, caseVo);
-			Doctor doctor = doctorService.get(e.getDoctorId());
-			Disease disease = diseaseService.get(e.getDisaseId());
-			caseVo.setDisaseName(disease.getDiseaseName());
-			caseVo.setDoctorName(doctor.getRealName());
+			Long disaseId = e.getDisaseId();
+			Long doctorId = e.getDoctorId();
+			if (disaseMap.containsKey(disaseId)){
+				caseVo.setDisaseName(disaseMap.get(disaseId));
+			}else{
+				Disease disease = diseaseService.get(e.getDisaseId());
+				if(disease != null){
+					disaseMap.put(disease.getId(),disease.getDiseaseName());
+					caseVo.setDisaseName(disease.getDiseaseName());
+				}
+			}
+			if (doctorMap.containsKey(doctorId)){
+				caseVo.setDoctorName(doctorMap.get(doctorId));
+			}else{
+				Doctor doctor = doctorService.get(e.getDoctorId());
+				if(doctor != null){
+					doctorMap.put(doctor.getId(),doctor.getRealName());
+					caseVo.setDoctorName(doctor.getRealName());
+				}
+			}
 			caseVo.setPatientName(realName);
 			System.out.println(caseVo.toString());
 			return caseVo;

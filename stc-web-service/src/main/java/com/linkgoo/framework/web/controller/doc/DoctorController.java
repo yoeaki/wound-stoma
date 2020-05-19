@@ -100,7 +100,7 @@ public class DoctorController extends
 	 * @return com.linkgoo.framework.web.core.response.RestResponse
 	 * @Exception
 	 */
-	@GetMapping("/list/{id}")
+/*	@GetMapping("/list/{id}")
 	public RestResponse lists(@PathVariable("id") long doctorId){
 		Case aCase = new Case();
 		aCase.setDoctorId(doctorId);
@@ -120,7 +120,7 @@ public class DoctorController extends
 		}).collect(Collectors.toList());
 
 		return RestResponse.success(caseVos);
-	}
+	}*/
 
 
 	//查看所有教练数量
@@ -144,5 +144,50 @@ public class DoctorController extends
 	public RestResponse count(){
 		return RestResponse.success(doctorService.count());
 	}
+
+	@GetMapping("/list/{id}")
+	public RestResponse listsforDoctor(@PathVariable("id") long doctorId){
+		Doctor doctor = doctorService.get(doctorId);
+		if (doctor == null){
+			return RestResponse.fail("医生不存在");
+		}
+		String realName = doctor.getRealName();
+		Case aCase = new Case();
+		aCase.setDoctorId(doctorId);
+		List<Case> cases = caseService.find(aCase);
+
+		Map<Object,String> patientMap = new HashMap<>();
+		Map<Object,String> disaseMap = new HashMap<>();
+		List<CaseVo> caseVos = cases.stream().map(e -> {
+			CaseVo caseVo = new CaseVo();
+			BeanUtils.copyProperties(e, caseVo);
+			Long disaseId = e.getDisaseId();
+			Long patientId = e.getPatientId();
+			if (disaseMap.containsKey(disaseId)){
+				caseVo.setDisaseName(disaseMap.get(disaseId));
+			}else{
+				Disease disease = diseaseService.get(e.getDisaseId());
+				if(disease != null){
+					disaseMap.put(disease.getId(),disease.getDiseaseName());
+					caseVo.setDisaseName(disease.getDiseaseName());
+				}
+			}
+			if (patientMap.containsKey(patientId)){
+				caseVo.setPatientName(patientMap.get(patientId));
+			}else{
+				Patient patient = patientService.get(e.getPatientId());
+				if(patient != null){
+					patientMap.put(patient.getId(),patient.getRealName());
+					caseVo.setPatientName(patient.getRealName());
+				}
+			}
+			caseVo.setDoctorName(realName);
+			System.out.println(caseVo.toString());
+			return caseVo;
+		}).collect(Collectors.toList());
+
+		return RestResponse.success(caseVos);
+	}
+
 
 }

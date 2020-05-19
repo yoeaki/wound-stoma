@@ -1,6 +1,10 @@
 package com.linkgoo.framework.web.controller.cas;
 
 import com.linkgoo.framework.web.core.response.RestResponse;
+import com.linkgoo.framework.web.entity.dis.Disease;
+import com.linkgoo.framework.web.repository.cas.CaseRepository;
+import com.linkgoo.framework.web.repository.dis.DiseaseRepository;
+import com.linkgoo.framework.web.service.dis.DiseaseService;
 import org.apache.commons.io.IOUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.HashMap;
 
 /**
  * Title: case  病历
@@ -35,6 +40,17 @@ public class CaseController extends
 
 	@Autowired
 	CaseService caseService;
+	@Autowired
+	DiseaseService diseaseService;
+	@Autowired
+	CaseRepository caseRepository;
+
+	@PutMapping("update")
+	public RestResponse updatecc(@RequestBody Case aCase){
+
+		int update = caseRepository.update(aCase);
+		return update > 0 ? RestResponse.success("修改成功"):RestResponse.fail("修改失败");
+	}
 
 	@RequestMapping(value = "/upload", method = {RequestMethod.POST})
 	public RestResponse upload(@RequestParam("file") MultipartFile file,  HttpServletRequest request) {
@@ -145,6 +161,8 @@ public class CaseController extends
 
 	@GetMapping("count")
 	public RestResponse count(){
-		return RestResponse.success(caseService.count());
+		int i = caseRepository.caseCount();
+		System.out.println("总数：" + i);
+		return RestResponse.success(i);
 	}
 }

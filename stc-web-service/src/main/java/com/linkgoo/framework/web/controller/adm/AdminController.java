@@ -102,7 +102,7 @@ public class AdminController extends
 	public RestResponse caseSameCount(){
 		List<Case> all = caseService.findAll();
 		List<DiseaseVo> diseaseVos = new ArrayList<>();
-		all.stream().collect(Collectors.groupingBy(Case::getDisaseId)).forEach((k,v) -> {
+		all.stream().filter(c -> c.getDisaseId() != null).collect(Collectors.groupingBy(Case::getDisaseId)).forEach((k,v) ->{
 			DiseaseVo diseaseVo = new DiseaseVo();
 			int size = v.size();
 			Disease disease = diseaseService.get(k);

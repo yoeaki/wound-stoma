@@ -16,5 +16,6 @@ import com.linkgoo.framework.web.entity.cas.Case;
 
 @Repository("casCaseRepository")
 public interface CaseRepository extends BaseRepository<Case> {
+    public int caseCount();
 
 }

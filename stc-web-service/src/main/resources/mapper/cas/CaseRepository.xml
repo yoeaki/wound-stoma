@@ -268,6 +268,14 @@
 		<include refid="table" />
 		<include refid="conditionPK" />
 	</select>
+	<select id="caseCount" resultType="int" >
+		select
+		count(1)
+		from
+		cas_case
+		where
+		!ISNULL(disase_id)
+	</select>
 	<select id="getOne" resultMap="caseMap"
 		parameterType="com.linkgoo.framework.web.entity.cas.Case">
 		select

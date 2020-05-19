@@ -8,12 +8,6 @@ jwt:
   expiration: 6000000
   header: 'authorization'
 
-#数据源
-#需要开启多语句请求才能进行批量操作
-#spring.datasource.url=jdbc:mysql://58.87.118.11:3306/linkgoo?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
-#spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
-#spring.datasource.username=root
-#spring.datasource.password=linkgoo
 
 
 spring:
