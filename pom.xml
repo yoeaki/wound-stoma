@@ -38,7 +38,7 @@
         <commons-lang3.version>3.8.1</commons-lang3.version>
         <commons-io.version>2.6</commons-io.version>
         <lombok.version>1.18.10</lombok.version>
-        <fastjson.version>1.2.62</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <pagehelper.version>5.1.10</pagehelper.version>
         <mybatis-start.version>2.1.0</mybatis-start.version>
         <spring.security.oauth2.vserion>2.4.0.RELEASE</spring.security.oauth2.vserion>
